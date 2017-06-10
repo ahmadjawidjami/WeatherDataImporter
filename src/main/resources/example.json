@@ -1,0 +1,39 @@
+{
+  "source_id":         "luftdaten",
+  "device":          "",
+  "timestamp":        "2017-05-10T10:56:21.511Z",
+  "timestamp_data":   "2017-06-06T00:02:10Z",
+  "location": {
+    "lat":     48.779,
+    "lon":    9.160
+  },
+  "license": "",
+  "sensors": [
+    {
+      "sensor": "",
+      "observation_type": "pressure",
+      "observation_value": 97740.48
+    },
+    {
+      "sensor": "",
+      "observation_type": "altitude",
+      "observation_value": ""
+    },
+
+    {
+      "sensor": "",
+      "observation_type": "pressure_sealevel",
+      "observation_value": ""
+    },
+    {
+      "sensor": "",
+      "observation_type": "temperature",
+      "observation_value": 17.62
+    },
+    {
+      "sensor": "",
+      "observation_type": "humidity",
+      "observation_value": 76.34
+    }
+  ]
+}
