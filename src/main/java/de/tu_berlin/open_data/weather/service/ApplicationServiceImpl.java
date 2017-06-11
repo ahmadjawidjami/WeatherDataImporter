@@ -12,14 +12,15 @@ import java.lang.reflect.Field;
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
     @Override
-    public String[] getFields(Class<WeatherData> weatherDataClass) {
+    public String[] getFields(Class<? extends Object> aClass) {
 
-        Field[] weatherDataClassFields = weatherDataClass.getDeclaredFields();
+        Field[] aClassDeclaredFields = aClass.getDeclaredFields();
 
-        String[] fieldsArray = new String[weatherDataClassFields.length];
+        String[] fieldsArray = new String[aClassDeclaredFields.length];
 
-        for (int index = 0; index < weatherDataClassFields.length; index++)
-            fieldsArray[index] = weatherDataClassFields[index].getName();
+        for (int index = 0; index < aClassDeclaredFields.length; index++)
+            fieldsArray[index] = aClassDeclaredFields[index].getName();
+
         return fieldsArray;
     }
 }

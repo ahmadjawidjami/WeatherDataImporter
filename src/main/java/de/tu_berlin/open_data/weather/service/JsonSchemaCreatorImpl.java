@@ -1,6 +1,5 @@
 package de.tu_berlin.open_data.weather.service;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import de.tu_berlin.open_data.weather.model.WeatherData;
@@ -15,56 +14,59 @@ public class JsonSchemaCreatorImpl implements JsonSchemaCreator {
     public String create(WeatherData currentWeatherData) {
         JsonNodeFactory nodeFactory = JsonNodeFactory.instance;
 
-        ObjectNode node = nodeFactory.objectNode();
+        ObjectNode mainObject = nodeFactory.objectNode();
 
-            node.put("source_id", "luftdaten");
-            node.put("device", "");
-            node.put("timestamp", currentWeatherData.getTimestamp());
-            node.put("timestamp_data", currentWeatherData.getTimestamp());
+        mainObject.put("source_id", "luftdaten_info");
+        mainObject.put("device", currentWeatherData.getSensorId());
+        mainObject.put("timestamp", currentWeatherData.getTimestamp());
+        mainObject.put("timestamp_record", "");
 
 
-            ObjectNode firstLevelChild = nodeFactory.objectNode();
+        ObjectNode firstLevelChild = nodeFactory.objectNode();
 
-            firstLevelChild.put("lat", currentWeatherData.getLat());
-            firstLevelChild.put("lon", currentWeatherData.getLon());
+        firstLevelChild.put("lat", currentWeatherData.getLat());
+        firstLevelChild.put("lon", currentWeatherData.getLon());
 
-            node.set("location", firstLevelChild);
+        mainObject.set("location", firstLevelChild);
 
-            node.put("license", "");
+        mainObject.put("license", "find out");
 
-            ArrayNode arrayNode = nodeFactory.arrayNode();
+        firstLevelChild = nodeFactory.objectNode();
 
-            ObjectNode arrayNodeMember = nodeFactory.objectNode();
-            arrayNodeMember.put("sensor", "");
-            arrayNodeMember.put("observation_type", "pressure");
-            arrayNodeMember.put("observation_value", currentWeatherData.getPressure());
-            arrayNode.add(arrayNodeMember);
+        ObjectNode secondLevelChild = nodeFactory.objectNode();
+        secondLevelChild.put("sensor", currentWeatherData.getSensorType());
+        secondLevelChild.put("observation_value", currentWeatherData.getPressure());
+        firstLevelChild.set("pressure", secondLevelChild);
 
-            arrayNodeMember.put("sensor", "");
-            arrayNodeMember.put("observation_type", "altitude");
-            arrayNodeMember.put("observation_value", currentWeatherData.getAltitude());
-            arrayNode.add(arrayNodeMember);
+        secondLevelChild = nodeFactory.objectNode();
+        secondLevelChild.put("sensor", currentWeatherData.getSensorType());
+        secondLevelChild.put("observation_value", currentWeatherData.getAltitude());
+        firstLevelChild.set("altitude", secondLevelChild);
 
-            arrayNodeMember.put("sensor", "");
-            arrayNodeMember.put("observation_type", "pressure_sealevel");
-            arrayNodeMember.put("observation_value", currentWeatherData.getPressureSeaLevel());
-            arrayNode.add(arrayNodeMember);
+        secondLevelChild = nodeFactory.objectNode();
+        secondLevelChild.put("sensor", currentWeatherData.getSensorType());
+        secondLevelChild.put("observation_value", currentWeatherData.getPressureSeaLevel());
+        firstLevelChild.set("pressure_seallevel", secondLevelChild);
 
-            arrayNodeMember.put("sensor", "");
-            arrayNodeMember.put("observation_type", "temperature");
-            arrayNodeMember.put("observation_value", currentWeatherData.getTemperature());
-            arrayNode.add(arrayNodeMember);
+        secondLevelChild = nodeFactory.objectNode();
+        secondLevelChild.put("sensor", currentWeatherData.getSensorType());
+        secondLevelChild.put("observation_value", currentWeatherData.getTemperature());
+        firstLevelChild.set("temperature", secondLevelChild);
 
-            arrayNodeMember.put("sensor", "");
-            arrayNodeMember.put("observation_type", "humidity");
-            arrayNodeMember.put("observation_value", currentWeatherData.getHumidity());
-            arrayNode.add(arrayNodeMember);
-
-            node.set("sensors", arrayNode);
-     //   }
+        secondLevelChild = nodeFactory.objectNode();
+        secondLevelChild.put("sensor", currentWeatherData.getSensorType());
+        secondLevelChild.put("observation_value", currentWeatherData.getHumidity());
+        firstLevelChild.set("humidity", secondLevelChild);
 
 
 
-        return node.toString();
+        mainObject.set("sensors", firstLevelChild);
+        firstLevelChild = nodeFactory.objectNode();
+
+        firstLevelChild.put("location", currentWeatherData.getLocation());
+        mainObject.set("extra", firstLevelChild);
+
+
+        return mainObject.toString();
     }
 }
